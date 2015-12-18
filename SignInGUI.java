@@ -1,20 +1,60 @@
-import java.awt.*;
+package email_client;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
 
+@SuppressWarnings("serial")
 public class SignInGUI extends JFrame {
-	private String[] arrMailHost = { "gmail.com", "stud.fra-uas.de", "others" };
+
 	private JLabel namelabel = new JLabel("Username");
 	private JLabel emaillabel = new JLabel("Email Address");
 	private JLabel passwordlabel = new JLabel("Password");
-	private JLabel info = new JLabel("");
-	private JTextField name = new JTextField(20);
-	private JTextField email = new JTextField(20);
+	private JLabel rememberlabel = new JLabel("Remember me?");
+	private JTextField name = new JTextField(30);
+	private JTextField email = new JTextField(30);
 	private JPasswordField password = new JPasswordField(20);
-	private JButton yes = new JButton("Yes");
-	private JButton reset = new JButton("Reset");
+	private JCheckBox remember = new JCheckBox();
+
+	private AbstractAction resetAction = new AbstractAction() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			name.setText("");
+			email.setText("");
+			password.setText("");
+		}
+	};
+
+	private AbstractAction loginAction = new AbstractAction() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO: Add login function
+		}
+	};
+
+	private JButton createLoginButton() {
+		JButton login = new JButton("L");
+		login.addActionListener(loginAction);
+		return login;
+	}
+
+	private JButton createResetButton() {
+		JButton reset = new JButton("R");
+		reset.addActionListener(resetAction);
+		return reset;
+	}
 
 	public SignInGUI() {
 		add(createMainPanel());
@@ -44,34 +84,31 @@ public class SignInGUI extends JFrame {
 		panel.add(passwordlabel, c);
 		c.gridy = 5;
 		panel.add(password, c);
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 6;
 		c.gridwidth = 1;
-		panel.add(yes, c);
-		yes.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				String user = email.getText();
-				//char[] pass = password.getPassword();
-				String passString = new String (password.getPassword());
-				Email test = new Email(user,passString);
-				test.checkEmail();
-				
-			}
-		});
+		panel.add(createRememberPanel(), c);
+		c.gridx = 1;
+		panel.add(createLoginButton(), c);
 		c.gridx = 2;
-		panel.add(reset, c);
-		c.gridx = 0;
-		c.ipadx = 120;
-		panel.add(info, c);
+		panel.add(createResetButton(), c);
 		return panel;
 	}
 
-	private JComboBox<String> createComboBox(String[] arrItem) {
-		JComboBox<String> cb = new JComboBox<String>(arrItem);
-		return cb;
+	private JPanel createRememberPanel() {
+		JPanel rememberpanel = new JPanel(new GridLayout());
+		rememberpanel.add(rememberlabel);
+		rememberpanel.add(remember);
+		return rememberpanel;
 	}
-	
+
+	public static void main(String[] args) {
+
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		}
+		new SignInGUI();
+		new InboxGUI();
+	}
 }
